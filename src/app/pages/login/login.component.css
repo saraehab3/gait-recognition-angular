@@ -1,0 +1,13 @@
+.form-group { margin-bottom: 1.25rem; }
+.input-wrapper { position: relative; }
+.eye-btn { position:absolute; right:.875rem; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--text-muted); cursor:pointer; display:flex; padding:.25rem; }
+.eye-btn svg { width:1rem; height:1rem; }
+.eye-btn:hover { color:var(--text); }
+.remember-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:.5rem; }
+.check-label { display:flex; align-items:center; gap:.5rem; font-size:.875rem; color:var(--text-muted); cursor:pointer; }
+.check-label input { accent-color:var(--cyan); }
+.link-cyan { color:var(--cyan); text-decoration:none; font-size:.875rem; font-weight:500; }
+.link-cyan:hover { color:#26d4ff; }
+.auth-switch { text-align:center; margin-top:1.25rem; font-size:.875rem; color:var(--text-muted); }
+.auth-footer-note { text-align:center; font-size:.75rem; color:var(--text-muted); margin-top:1.25rem; }
+.loader { width:1rem; height:1rem; border:2px solid rgba(11,15,26,.3); border-top-color:#0b0f1a; border-radius:50%; animation:spin .8s linear infinite; }
