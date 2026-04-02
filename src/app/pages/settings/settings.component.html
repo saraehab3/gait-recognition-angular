@@ -1,0 +1,155 @@
+<div class="dashboard-layout">
+  <app-sidebar></app-sidebar>
+  <main class="dashboard-main">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Settings</h1>
+        <p class="page-sub">Configure the GaitID AI platform</p>
+      </div>
+      <button class="btn-primary" (click)="save()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:1rem;height:1rem"><polyline points="20 6 9 17 4 12"/></svg>
+        {{ saved ? 'Saved!' : 'Save Changes' }}
+      </button>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button *ngFor="let t of tabs" class="tab" [class.active]="activeTab===t.key" (click)="setTab(t.key)">{{ t.label }}</button>
+    </div>
+
+    <div class="settings-body">
+      <!-- Profile -->
+      <div *ngIf="activeTab==='profile'" class="card">
+        <div class="section-head">User Profile</div>
+        <div class="settings-grid">
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input [(ngModel)]="profile.name" class="form-input"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input [(ngModel)]="profile.email" class="form-input"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Department</label>
+            <input [(ngModel)]="profile.dept" class="form-input"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Role</label>
+            <select [(ngModel)]="profile.role" class="form-input">
+              <option>Admin</option>
+              <option>Researcher</option>
+              <option>Security Officer</option>
+            </select>
+          </div>
+        </div>
+        <div class="avatar-section">
+          <div class="big-avatar">AH</div>
+          <button class="btn-outline" style="font-size:.8125rem;padding:.5rem 1rem">Change Photo</button>
+        </div>
+      </div>
+
+      <!-- System -->
+      <div *ngIf="activeTab==='system'" class="card">
+        <div class="section-head">Recognition Engine</div>
+        <div class="form-group">
+          <label class="form-label">Match Confidence Threshold — {{ system.matchThreshold }}%</label>
+          <input type="range" min="50" max="99" [(ngModel)]="system.matchThreshold" class="range-input"/>
+          <div class="range-labels"><span>50%</span><span>99%</span></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Max View Angle Range — {{ system.maxAngleRange }}°</label>
+          <input type="range" min="36" max="180" step="18" [(ngModel)]="system.maxAngleRange" class="range-input"/>
+          <div class="range-labels"><span>36°</span><span>180°</span></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Silhouette Detection Mode</label>
+          <select [(ngModel)]="system.silDetectionMode" class="form-input">
+            <option value="background_subtraction">Background Subtraction</option>
+            <option value="deep_segmentation">Deep Segmentation</option>
+            <option value="optical_flow">Optical Flow</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">CNN Batch Size</label>
+          <select [(ngModel)]="system.batchSize" class="form-input">
+            <option [ngValue]="16">16</option>
+            <option [ngValue]="32">32</option>
+            <option [ngValue]="64">64</option>
+            <option [ngValue]="128">128</option>
+          </select>
+        </div>
+        <div class="toggle-row">
+          <div>
+            <div style="font-weight:600;color:var(--text)">GPU Acceleration</div>
+            <div style="font-size:.75rem;color:var(--text-muted)">Enable CUDA for faster inference</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" [(ngModel)]="system.enableGPU"/>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Security -->
+      <div *ngIf="activeTab==='security'" class="card">
+        <div class="section-head">Security Settings</div>
+        <div class="toggle-row">
+          <div>
+            <div style="font-weight:600;color:var(--text)">Two-Factor Authentication</div>
+            <div style="font-size:.75rem;color:var(--text-muted)">Require OTP on every login</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" [(ngModel)]="security.twoFactor"/>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="form-group" style="margin-top:1.25rem">
+          <label class="form-label">Session Timeout (minutes)</label>
+          <select [(ngModel)]="security.sessionTimeout" class="form-input">
+            <option value="15">15</option>
+            <option value="30">30</option>
+            <option value="60">60</option>
+            <option value="120">120</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">IP Whitelist (one per line)</label>
+          <textarea [(ngModel)]="security.ipWhitelist" class="form-input" rows="3" style="resize:vertical"></textarea>
+        </div>
+        <div class="danger-zone">
+          <div class="section-head" style="color:#f87171">Danger Zone</div>
+          <div class="danger-row">
+            <div>
+              <div style="font-weight:600;color:var(--text)">Reset System Data</div>
+              <div style="font-size:.75rem;color:var(--text-muted)">Erase all GEI records and profiles. Irreversible.</div>
+            </div>
+            <button class="btn-outline" style="border-color:rgba(239,68,68,.4);color:#f87171">Reset</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notifications -->
+      <div *ngIf="activeTab==='notifications'" class="card">
+        <div class="section-head">Notification Preferences</div>
+        <div class="toggle-row" *ngFor="let item of [
+          { key: 'email',    label: 'Email Notifications',   sub: 'Receive results via email' },
+          { key: 'desktop',  label: 'Desktop Push Alerts',   sub: 'Browser push notifications' },
+          { key: 'sms',      label: 'SMS Alerts',            sub: 'Text message for critical events' },
+          { key: 'highConf', label: 'High-Confidence Match', sub: 'Notify on matches ≥ 95%' },
+          { key: 'noMatch',  label: 'No Match Found',        sub: 'Alert when identification fails' },
+          { key: 'weekly',   label: 'Weekly Summary Report', sub: 'Email digest every Monday' },
+        ]">
+          <div>
+            <div style="font-weight:600;color:var(--text)">{{ item.label }}</div>
+            <div style="font-size:.75rem;color:var(--text-muted)">{{ item.sub }}</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" [(ngModel)]="notifs[item.key as keyof typeof notifs]"/>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
