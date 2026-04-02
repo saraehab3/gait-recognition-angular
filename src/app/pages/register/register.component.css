@@ -1,0 +1,10 @@
+.form-group { margin-bottom:1rem; }
+.input-wrapper { position:relative; }
+.eye-btn { position:absolute; right:.875rem; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--text-muted); cursor:pointer; display:flex; padding:.25rem; }
+.role-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:.5rem; }
+.role-btn { padding:.625rem .75rem; border:1px solid var(--border); border-radius:var(--radius); background:var(--bg); color:var(--text-muted); font-size:.8125rem; font-weight:500; cursor:pointer; transition:.15s; font-family:var(--font); }
+.role-btn:hover { border-color:var(--cyan-border); color:var(--text); }
+.role-active { background:rgba(0,200,255,.12) !important; border-color:rgba(0,200,255,.5) !important; color:var(--cyan) !important; }
+.link-cyan { color:var(--cyan); text-decoration:none; font-weight:500; }
+.auth-switch { text-align:center; margin-top:1.25rem; font-size:.875rem; color:var(--text-muted); }
+.loader { width:1rem; height:1rem; border:2px solid rgba(11,15,26,.3); border-top-color:#0b0f1a; border-radius:50%; animation:spin .8s linear infinite; }
