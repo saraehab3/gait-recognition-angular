@@ -1,0 +1,148 @@
+<div class="dashboard-layout">
+  <app-sidebar></app-sidebar>
+  <main class="dashboard-main">
+    <div class="page-header">
+      <h1 class="page-title">Upload Video</h1>
+      <p class="page-sub">Submit surveillance footage for gait analysis and identification</p>
+    </div>
+
+    <!-- Mode toggle -->
+    <div class="mode-toggle">
+      <button [class.active]="mode==='upload'" (click)="switchMode('upload')">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+        Upload File
+      </button>
+      <button [class.active]="mode==='camera'" (click)="switchMode('camera')">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+        Live Camera
+      </button>
+    </div>
+
+    <div class="upload-grid">
+      <!-- Left -->
+      <div>
+        <!-- Drop zone -->
+        <div *ngIf="mode==='upload'"
+          class="drop-zone" [class.drag-over]="dragging"
+          (dragover)="onDragOver($event)" (dragleave)="onDragLeave()" (drop)="onDrop($event)"
+          (click)="fileInput.click()"
+        >
+          <input #fileInput type="file" accept="video/*" style="display:none" (change)="onFileChange($event)"/>
+          <div *ngIf="!file">
+            <div class="drop-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg></div>
+            <p class="drop-title">Drop surveillance footage here</p>
+            <p class="drop-sub">Supports MP4, AVI, MKV, MOV</p>
+            <span class="browse-btn">Browse Files</span>
+          </div>
+          <div *ngIf="file">
+            <div class="drop-icon" style="background:var(--cyan-dim);border:1px solid var(--cyan-border)">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--cyan)"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </div>
+            <p class="drop-title" style="color:var(--cyan)">{{ file.name }}</p>
+            <p class="drop-sub">{{ fileSizeMB() }} MB</p>
+          </div>
+        </div>
+
+        <!-- Camera -->
+        <div *ngIf="mode==='camera'" class="camera-wrapper">
+          <video #videoEl autoplay muted playsinline style="width:100%;height:100%;object-fit:cover"></video>
+          <div *ngIf="!cameraActive" class="camera-placeholder">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:3rem;height:3rem;color:var(--text-muted);margin-bottom:.75rem"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+            <p style="color:var(--text-muted);font-size:.875rem">Camera starting...</p>
+          </div>
+          <!-- Scan overlay -->
+          <div *ngIf="cameraActive" class="scan-overlay">
+            <div class="scan-line"></div>
+            <div class="camera-corner tl"></div>
+            <div class="camera-corner tr"></div>
+            <div class="camera-corner bl"></div>
+            <div class="camera-corner br"></div>
+            <div class="live-badge"><span class="live-dot pulse"></span> LIVE</div>
+          </div>
+        </div>
+
+        <!-- Start button -->
+        <button *ngIf="mode==='upload' && file && state==='idle'"
+          class="btn-primary" style="width:100%;justify-content:center;margin-top:1rem"
+          (click)="startProcessing()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:1rem;height:1rem"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Start AI Analysis
+        </button>
+        <button *ngIf="mode==='camera' && cameraActive"
+          class="btn-primary" style="width:100%;justify-content:center;margin-top:1rem"
+          (click)="startProcessing()">
+          Analyze Live Feed
+        </button>
+
+        <!-- Progress -->
+        <div *ngIf="state==='processing'" class="progress-card card" style="margin-top:1rem">
+          <div class="progress-row">
+            <span>Processing...</span>
+            <span style="color:var(--cyan);font-family:var(--font-mono)">{{ progress | number:'1.0-0' }}%</span>
+          </div>
+          <div class="progress-track" style="margin-top:.75rem">
+            <div class="progress-bar" [style.width.%]="progress"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: AI steps + result -->
+      <div>
+        <!-- AI Steps -->
+        <div class="card" style="margin-bottom:1.25rem">
+          <div style="font-weight:700;color:#fff;margin-bottom:1.25rem">AI Analysis Pipeline</div>
+          <div *ngFor="let s of aiSteps; let i = index">
+            <div class="ai-step" [class.done]="stepDone(i)" [class.active]="stepActive(i)">
+              <div class="ai-step-num">
+                <svg *ngIf="stepDone(i)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:.875rem;height:.875rem"><polyline points="20 6 9 17 4 12"/></svg>
+                <span *ngIf="!stepDone(i) && !stepActive(i)">{{ i + 1 }}</span>
+                <span *ngIf="stepActive(i)" class="spinner"></span>
+              </div>
+              <div>
+                <h4>{{ s.label }}</h4>
+                <p>{{ s.desc }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Result -->
+        <div *ngIf="state==='done'" class="result-card">
+          <div class="result-header">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:1.25rem;height:1.25rem;color:var(--cyan)"><polyline points="20 6 9 17 4 12"/></svg>
+            <span style="font-weight:700;color:#fff">Identification Result</span>
+          </div>
+          <div class="result-subject">
+            <div class="subject-avatar">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:2.5rem;height:2.5rem;color:var(--cyan)"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <div>
+              <div style="font-size:1.25rem;font-weight:900;color:#fff">{{ result.subject }}</div>
+              <span class="badge badge-cyan" style="margin-top:.375rem">Rank-1 Match</span>
+            </div>
+          </div>
+          <div class="result-sim">
+            <span style="font-size:.875rem;color:var(--text-muted)">Cosine Similarity</span>
+            <span style="font-size:1.375rem;font-weight:900;color:var(--cyan)">{{ result.similarity }}%</span>
+          </div>
+          <div class="progress-track" style="margin-bottom:1rem">
+            <div class="progress-bar" [style.width.%]="result.similarity"></div>
+          </div>
+          <div class="result-meta">
+            <div class="meta-box">
+              <div class="meta-label">Condition</div>
+              <div class="meta-val">{{ result.condition }}</div>
+            </div>
+            <div class="meta-box">
+              <div class="meta-label">View Angle</div>
+              <div class="meta-val">{{ result.angle }}</div>
+            </div>
+          </div>
+          <a href="/profiles" class="btn-outline" style="width:100%;justify-content:center;margin-top:1rem;border-color:var(--cyan-border);color:var(--cyan)">
+            View Gait Profile
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
