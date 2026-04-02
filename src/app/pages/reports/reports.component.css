@@ -1,0 +1,16 @@
+.page-header { display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem; }
+.page-title { font-size:1.5rem;font-weight:800;color:#fff; }
+.page-sub { font-size:.875rem;color:var(--text-muted);margin-top:.25rem; }
+.chart-title { font-size:1rem;font-weight:700;color:#fff; }
+.table-header { padding:1rem 1.25rem;border-bottom:1px solid var(--border); }
+.monthly-chart { display:flex;align-items:flex-end;gap:.5rem;height:200px;padding-top:1.5rem; }
+.mc-bar { flex:1;display:flex;flex-direction:column;align-items:center;height:100%;position:relative; }
+.mc-fill { width:100%;background:linear-gradient(to top,var(--cyan),var(--blue));border-radius:4px 4px 0 0;min-height:4px;margin-top:auto;opacity:.8; }
+.mc-label { font-size:.5625rem;color:var(--text-muted);margin-top:.375rem; }
+.mc-label-top { font-size:.5625rem;color:rgba(0,200,255,.6);margin-bottom:.25rem; }
+.reports-grid { display:grid;grid-template-columns:1fr 1fr;gap:1.5rem; }
+@media(max-width:900px){ .reports-grid{grid-template-columns:1fr} }
+.arch-points { display:flex;flex-direction:column;gap:.875rem; }
+.arch-point { display:flex;align-items:flex-start;gap:.75rem; }
+.arch-dot { width:.375rem;height:.375rem;border-radius:50%;background:var(--cyan);flex-shrink:0;margin-top:.375rem; }
+.arch-point p { font-size:.875rem;color:var(--text-muted);line-height:1.6; }
