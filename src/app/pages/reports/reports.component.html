@@ -1,0 +1,109 @@
+<div class="dashboard-layout">
+  <app-sidebar></app-sidebar>
+  <main class="dashboard-main">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Reports</h1>
+        <p class="page-sub">Gait recognition evaluation metrics and analysis</p>
+      </div>
+      <button class="btn-primary">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:1rem;height:1rem"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export PDF
+      </button>
+    </div>
+
+    <!-- Summary stats -->
+    <div class="grid-4" style="margin-bottom:1.5rem">
+      <div class="card" *ngFor="let s of summaryStats">
+        <div style="font-size:.75rem;color:var(--text-muted);margin-bottom:.5rem">{{ s.label }}</div>
+        <div style="font-size:1.625rem;font-weight:900;color:var(--cyan)">{{ s.value }}</div>
+      </div>
+    </div>
+
+    <!-- Chart -->
+    <div class="card" style="margin-bottom:1.5rem">
+      <div class="chart-title" style="margin-bottom:1.5rem">Rank-1 Accuracy Trend (Monthly)</div>
+      <div class="monthly-chart">
+        <div class="mc-bar" *ngFor="let b of barData">
+          <div class="mc-label-top">{{ b.v }}%</div>
+          <div class="mc-fill" [style.height.%]="b.v"></div>
+          <div class="mc-label">{{ b.month }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reports-grid">
+      <!-- Condition table -->
+      <div class="card" style="padding:0;overflow:hidden">
+        <div class="table-header">
+          <div class="chart-title">Recognition by Condition</div>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Condition</th>
+              <th>#</th>
+              <th>Rank-1</th>
+              <th>mAP</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let r of conditionRows">
+              <td>{{ r.cond }}</td>
+              <td style="color:var(--text-muted)">{{ r.nm }}</td>
+              <td>
+                <div style="display:flex;align-items:center;gap:.625rem">
+                  <div class="progress-track" style="width:60px">
+                    <div class="progress-bar" [style.width.%]="r.pct"></div>
+                  </div>
+                  <span style="font-weight:600;color:var(--cyan)">{{ r.pct }}%</span>
+                </div>
+              </td>
+              <td style="font-weight:600;color:#7aa2ff">{{ r.map }}%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Angle table -->
+      <div class="card" style="padding:0;overflow:hidden">
+        <div class="table-header">
+          <div class="chart-title">Recognition by View Angle</div>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Angle</th>
+              <th>Rank-1</th>
+              <th>Rank-5</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let r of angleRows">
+              <td style="font-family:var(--font-mono)">{{ r.angle }}</td>
+              <td><span style="font-weight:700;color:var(--cyan)">{{ r.r1 }}%</span></td>
+              <td><span style="font-weight:600;color:#7aa2ff">{{ r.r5 }}%</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Confusion note -->
+    <div class="card" style="margin-top:1.5rem">
+      <div class="chart-title" style="margin-bottom:1rem">Model Architecture Notes</div>
+      <div class="arch-points">
+        <div class="arch-point" *ngFor="let p of [
+          'Ensemble of ResNet-50, VGG-16, and InceptionV3 for multi-scale gait feature extraction.',
+          'Part-based segmentation divides the GEI into 5 body regions for localized feature matching.',
+          'Cosine similarity metric used for probe-gallery matching across all experimental conditions.',
+          'Dataset: CASIA-B — 124 subjects × 11 viewing angles × 3 walking conditions.',
+          'Background subtraction uses frame-differencing with morphological refinement for clean silhouettes.'
+        ]">
+          <div class="arch-dot"></div>
+          <p>{{ p }}</p>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
