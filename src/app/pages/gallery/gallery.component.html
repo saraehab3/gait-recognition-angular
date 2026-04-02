@@ -1,0 +1,83 @@
+<div class="dashboard-layout">
+  <app-sidebar></app-sidebar>
+  <main class="dashboard-main">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Gallery Database</h1>
+        <p class="page-sub">GEI silhouette archive — {{ filtered.length }} entries</p>
+      </div>
+      <div style="display:flex;gap:.5rem">
+        <button class="view-btn" [class.active]="viewMode==='grid'" (click)="viewMode='grid'">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        </button>
+        <button class="view-btn" [class.active]="viewMode==='list'" (click)="viewMode='list'">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters">
+      <div class="search-box">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="search-icon"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input [(ngModel)]="search" placeholder="Search GEI ID or subject..." class="form-input search-input"/>
+      </div>
+      <div class="filter-chips">
+        <button *ngFor="let s of statuses" class="chip" [class.active]="filterStatus===s" (click)="filterStatus=s">{{ s }}</button>
+      </div>
+      <select [(ngModel)]="filterCondition" class="form-input" style="width:auto">
+        <option *ngFor="let c of conditions">{{ c }}</option>
+      </select>
+    </div>
+
+    <!-- Grid view -->
+    <div *ngIf="viewMode==='grid'" class="gei-grid">
+      <div class="card gei-entry" *ngFor="let e of filtered">
+        <div class="gei-thumb">
+          <div class="shimmer" style="position:absolute;inset:0"></div>
+          <svg viewBox="0 0 80 120" width="60" height="90" fill="none" style="position:relative">
+            <ellipse cx="40" cy="14" rx="10" ry="10" fill="rgba(0,200,255,0.8)"/>
+            <rect x="26" y="26" width="28" height="30" rx="4" fill="rgba(0,200,255,0.65)"/>
+            <rect x="16" y="28" width="10" height="22" rx="3" fill="rgba(0,200,255,0.45)"/>
+            <rect x="54" y="28" width="10" height="22" rx="3" fill="rgba(0,200,255,0.45)"/>
+            <rect x="28" y="56" width="11" height="32" rx="3" fill="rgba(0,200,255,0.7)"/>
+            <rect x="41" y="56" width="11" height="32" rx="3" fill="rgba(0,200,255,0.7)"/>
+          </svg>
+          <span class="badge gei-status-badge" [class]="badgeClass(e.status)">{{ e.status }}</span>
+        </div>
+        <div style="padding:.875rem">
+          <div style="font-family:var(--font-mono);font-size:.6875rem;color:var(--cyan);margin-bottom:.25rem">{{ e.id }}</div>
+          <div style="font-weight:600;color:#fff;font-size:.9375rem;margin-bottom:.5rem">{{ e.subject }}</div>
+          <div class="gei-tags">
+            <span class="mini-tag">{{ e.condition }}</span>
+            <span class="mini-tag">{{ e.angle }}</span>
+          </div>
+          <div style="margin-top:.75rem;display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:.6875rem;color:var(--text-muted)">{{ e.date }}</span>
+            <span *ngIf="e.accuracy" style="font-weight:700;color:var(--cyan);font-size:.875rem">{{ e.accuracy }}%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- List view -->
+    <div *ngIf="viewMode==='list'" class="card" style="padding:0;overflow:hidden;margin-top:1rem">
+      <table class="data-table">
+        <thead>
+          <tr><th>GEI ID</th><th>Subject</th><th>Condition</th><th>Angle</th><th>Status</th><th>Accuracy</th><th>Date</th></tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let e of filtered">
+            <td style="font-family:var(--font-mono);font-size:.75rem;color:var(--cyan)">{{ e.id }}</td>
+            <td>{{ e.subject }}</td>
+            <td>{{ e.condition }}</td>
+            <td>{{ e.angle }}</td>
+            <td><span class="badge" [class]="badgeClass(e.status)">{{ e.status }}</span></td>
+            <td style="color:var(--cyan);font-weight:600">{{ e.accuracy ? e.accuracy + '%' : '—' }}</td>
+            <td style="color:var(--text-muted);font-size:.75rem">{{ e.date }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
