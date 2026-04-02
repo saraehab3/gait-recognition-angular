@@ -1,0 +1,65 @@
+<div class="auth-container ai-grid" style="padding:2rem 1rem">
+  <div class="auth-glow"></div>
+
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="logo-icon glow-cyan">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <h1>Create Account</h1>
+      <p>Join the GaitID AI Platform</p>
+    </div>
+
+    <div class="card" style="border-radius:var(--radius-xl);padding:2rem">
+      <form (ngSubmit)="onSubmit()" #regForm="ngForm">
+
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" required [(ngModel)]="fullName" name="fullName" placeholder="Dr. Ahmed Hassan" class="form-input"/>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" required [(ngModel)]="email" name="email" placeholder="you@university.edu" class="form-input"/>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <div class="input-wrapper">
+            <input [type]="showPass ? 'text' : 'password'" required [(ngModel)]="password" name="password" placeholder="••••••••" class="form-input" style="padding-right:3rem"/>
+            <button type="button" class="eye-btn" (click)="showPass = !showPass">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:1rem;height:1rem"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Confirm Password</label>
+          <input type="password" required [(ngModel)]="confirmPassword" name="confirmPassword" placeholder="••••••••" class="form-input"/>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Role</label>
+          <div class="role-grid">
+            <button *ngFor="let r of roles" type="button"
+              [class.role-active]="role === r"
+              class="role-btn"
+              (click)="role = r"
+            >{{ r }}</button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary" style="width:100%;justify-content:center;margin-top:.5rem" [disabled]="loading">
+          <span *ngIf="loading" class="loader"></span>
+          <svg *ngIf="!loading" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:1rem;height:1rem"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          {{ loading ? 'Creating account...' : 'Sign Up' }}
+        </button>
+      </form>
+
+      <div class="auth-switch">
+        Already have an account?
+        <a routerLink="/login" class="link-cyan">Sign in</a>
+      </div>
+    </div>
+  </div>
+</div>
