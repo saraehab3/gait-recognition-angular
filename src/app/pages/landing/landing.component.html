@@ -1,0 +1,170 @@
+<!-- ===== NAVBAR ===== -->
+<nav class="landing-nav">
+  <div class="inner">
+    <a routerLink="/" class="logo-mark">
+      <div class="mark">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <span>GaitID<em>AI</em></span>
+    </a>
+    <div class="nav-links">
+      <a href="#how">How It Works</a>
+      <a href="#features">Features</a>
+      <a href="#team">Team</a>
+    </div>
+    <div class="nav-actions">
+      <a routerLink="/login" class="btn-outline" style="padding:.5rem 1rem">Login</a>
+      <a routerLink="/register" class="btn-primary" style="padding:.5rem 1rem">Get Started</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero ai-grid">
+  <div class="hero-glow"></div>
+  <div class="eyebrow-pill">
+    <span class="pulse-dot"></span>
+    AI-Powered Biometric Identification
+  </div>
+  <h1>Gait Recognition<br><span>for Surveillance</span></h1>
+  <p>
+    Identify individuals from low-resolution CCTV footage using AI-powered gait analysis.
+    No face required — just the way they walk.
+  </p>
+  <div class="hero-actions">
+    <a routerLink="/register" class="btn-primary">Get Started →</a>
+    <a routerLink="/login" class="btn-outline">Login ›</a>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="card" *ngFor="let s of stats">
+      <div class="stat-value" style="color:var(--cyan)">{{ s.val }}</div>
+      <div class="stat-label">{{ s.label }}</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HOW IT WORKS ===== -->
+<section id="how" class="section">
+  <div class="inner-section">
+    <div class="text-center">
+      <div class="section-eyebrow">Pipeline</div>
+      <h2 class="section-title">How It Works</h2>
+      <p class="section-sub">Four intelligent steps from raw footage to biometric match</p>
+    </div>
+    <div class="steps-grid" style="margin-top:3rem">
+      <div class="step-card" *ngFor="let s of steps; let i = index">
+        <div class="step-number">0{{ i + 1 }}</div>
+        <div class="step-icon">
+          <!-- eye -->
+          <svg *ngIf="s.icon==='eye'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          <!-- cpu -->
+          <svg *ngIf="s.icon==='cpu'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="6" height="6"/><path d="M20 9h1M20 12h1M20 15h1M4 9H3M4 12H3M4 15H3M9 4V3M12 4V3M15 4V3M9 20v1M12 20v1M15 20v1"/><rect x="5" y="5" width="14" height="14" rx="2"/></svg>
+          <!-- activity -->
+          <svg *ngIf="s.icon==='activity'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          <!-- shield -->
+          <svg *ngIf="s.icon==='shield'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>{{ s.label }}</h3>
+        <p>{{ s.desc }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FEATURES ===== -->
+<section id="features" class="section">
+  <div class="inner-section">
+    <div class="text-center">
+      <div class="section-eyebrow">Capabilities</div>
+      <h2 class="section-title">System Features</h2>
+    </div>
+    <div class="grid-3" style="margin-top:3rem">
+      <div class="feature-card" *ngFor="let f of features">
+        <div class="icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>{{ f.title }}</h3>
+        <p>{{ f.desc }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== GEI SECTION ===== -->
+<section class="section">
+  <div class="inner-section">
+    <div class="gei-section card" style="padding:3rem">
+      <div class="gei-grid">
+        <div>
+          <div class="section-eyebrow">Core Technology</div>
+          <h2 class="section-title" style="font-size:1.875rem">Gait Energy Image (GEI)</h2>
+          <p class="section-sub" style="margin-bottom:1.5rem">
+            GEI is a compact spatiotemporal representation of a complete gait cycle.
+            By averaging normalized binary silhouettes, it captures the distinctive walking
+            motion of a person in a single image.
+          </p>
+          <ul class="gei-list">
+            <li *ngFor="let t of ['Silhouette extraction via background subtraction','Normalization and alignment','Temporal averaging across the full gait cycle','Ensemble CNN feature extraction']">
+              <span class="list-dot"></span>{{ t }}
+            </li>
+          </ul>
+        </div>
+        <div class="gei-box">
+          <div class="shimmer" style="position:absolute;inset:0;border-radius:var(--radius-lg)"></div>
+          <svg viewBox="0 0 80 120" width="100" height="140" fill="none" style="position:relative;z-index:1">
+            <ellipse cx="40" cy="14" rx="10" ry="10" fill="rgba(0,200,255,0.8)"/>
+            <rect x="26" y="26" width="28" height="30" rx="4" fill="rgba(0,200,255,0.65)"/>
+            <rect x="16" y="28" width="10" height="22" rx="3" fill="rgba(0,200,255,0.45)"/>
+            <rect x="54" y="28" width="10" height="22" rx="3" fill="rgba(0,200,255,0.45)"/>
+            <rect x="28" y="56" width="11" height="32" rx="3" fill="rgba(0,200,255,0.7)"/>
+            <rect x="41" y="56" width="11" height="32" rx="3" fill="rgba(0,200,255,0.7)"/>
+            <rect x="26" y="88" width="12" height="18" rx="3" fill="rgba(0,200,255,0.6)"/>
+            <rect x="42" y="88" width="12" height="18" rx="3" fill="rgba(0,200,255,0.6)"/>
+          </svg>
+          <div style="position:absolute;bottom:.75rem;left:0;right:0;text-align:center;font-family:var(--font-mono);font-size:.625rem;color:rgba(0,200,255,.5)">GEI · Subject_042 · 90°</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer id="team" class="site-footer ai-grid">
+  <div class="inner">
+    <div class="footer-grid">
+      <div>
+        <a routerLink="/" class="logo-mark" style="margin-bottom:1rem;display:inline-flex">
+          <div class="mark"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <span>GaitID<em>AI</em></span>
+        </a>
+        <p style="font-size:.875rem;color:var(--text-muted);line-height:1.6;margin-top:.75rem">
+          Graduation project for biometric identification using gait recognition in low-resolution surveillance footage.
+        </p>
+      </div>
+      <div>
+        <h4 class="footer-heading">Project Team</h4>
+        <ul class="footer-list">
+          <li>Student Member 1</li>
+          <li>Student Member 2</li>
+          <li>Student Member 3</li>
+          <li>Student Member 4</li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-heading">Supervision</h4>
+        <ul class="footer-list">
+          <li>Supervisor: Dr. [Name]</li>
+          <li>Department of Computer Science</li>
+          <li>Faculty of Engineering</li>
+          <li>Academic Year 2025–2026</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-copy">
+      <p>Graduation Project — Gait Recognition for Biometric Identification in Low-Resolution Surveillance Footage</p>
+      <p>2025–2026</p>
+    </div>
+  </div>
+</footer>
