@@ -23,7 +23,7 @@ export class LoginComponent {
     this.loading = true;
     setTimeout(() => {
       this.loading = false;
-      this.router.navigate(['/otp']);
+      this.router.navigate(['/dashboard']);
     }, 1200);
   }
 }
